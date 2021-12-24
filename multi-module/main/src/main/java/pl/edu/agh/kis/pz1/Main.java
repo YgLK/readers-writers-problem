@@ -11,19 +11,19 @@ public class Main {
     public static void main(String[] args) throws IOException {
         PipedOutputStream out = new PipedOutputStream();
         PipedInputStream in = new PipedInputStream(out);
-        Writer writer1 = new Writer(out);
-        Writer writer2 = new Writer(out);
-        Writer writer3 = new Writer(out);
-        Reader reader1 = new Reader(in);
-        Reader reader2 = new Reader(in);
-//        Reader reader3 = new Reader(in);
-//        Reader reader4 = new Reader(in);
-//        Reader reader5 = new Reader(in);
-//        Reader reader6 = new Reader(in);
-//        Reader reader7 = new Reader(in);
-//        Reader reader8 = new Reader(in);
-//        Reader reader9 = new Reader(in);
-//        Reader reader10 = new Reader(in);
+        Writer writer1 = new Writer(out, ReadingRoom.resource);
+        Writer writer2 = new Writer(out, ReadingRoom.resource);
+        Writer writer3 = new Writer(out, ReadingRoom.resource);
+        Reader reader1 = new Reader(in, ReadingRoom.resource);
+        Reader reader2 = new Reader(in, ReadingRoom.resource);
+        Reader reader3 = new Reader(in, ReadingRoom.resource);
+        Reader reader4 = new Reader(in, ReadingRoom.resource);
+        Reader reader5 = new Reader(in, ReadingRoom.resource);
+        Reader reader6 = new Reader(in, ReadingRoom.resource);
+        Reader reader7 = new Reader(in, ReadingRoom.resource);
+        Reader reader8 = new Reader(in, ReadingRoom.resource);
+        Reader reader9 = new Reader(in, ReadingRoom.resource);
+        Reader reader10 = new Reader(in, ReadingRoom.resource);
         // run writers
         writer1.start();
         writer2.start();

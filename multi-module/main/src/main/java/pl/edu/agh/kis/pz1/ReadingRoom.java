@@ -1,13 +1,17 @@
 package pl.edu.agh.kis.pz1;
 
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 import static java.lang.Thread.sleep;
 
 public class ReadingRoom {
-    static int writersCount = 0;
-    static int readersCount = 0;
-    String resource= "";
+    volatile static int writersCount = 0;
+    static AtomicInteger writeCount = new AtomicInteger(0);
+    volatile static int readersCount = 0;
+    static AtomicInteger readCount = new AtomicInteger(0);
+    static String resource= "";
 
 
     private ReadingRoom(){}
@@ -21,10 +25,12 @@ public class ReadingRoom {
     public static synchronized void readStart(Thread reader, Logger LOGGER){
         try {
 //            System.out.println("Readers: " + readersCount);
-            while(writersCount > 0 || readersCount >= 5) {
-                reader.wait();
+//            while(writersCount > 0 || readersCount >= 5) {
+            while(writeCount.get() > 0 || readCount.get() >= 5) {
+                    reader.wait();
             }
-            readersCount++;
+//            readersCount++;
+            readCount.getAndIncrement();
             System.out.println(Writer.currentThread().getName() + " has started reading.");
             sleep(1500);
         } catch (InterruptedException e) {
@@ -33,7 +39,8 @@ public class ReadingRoom {
     }
 
     public static synchronized void readEnd(Thread reader, Logger LOGGER){
-        readersCount--;
+//        readersCount--;
+        readCount.getAndDecrement();
         System.out.println(Writer.currentThread().getName() + " has stopped reading.");
         reader.notify();
         // sleep after reading
@@ -59,7 +66,8 @@ public class ReadingRoom {
     }
 
     public static synchronized void writeStart(Thread writer, Logger LOGGER){
-        writersCount++;
+//        writersCount++;
+        writeCount.getAndIncrement();
         System.out.println(Writer.currentThread().getName() + " has started writing.");
         try {
             sleep(3000);
@@ -69,7 +77,8 @@ public class ReadingRoom {
     }
 
     public static void writeEnd(Thread writer, Logger LOGGER){
-        writersCount--;
+//        writersCount--;
+        writeCount.getAndDecrement();
         System.out.println(Writer.currentThread().getName() + " has stopped writing.");
 //        synchronized (writer){
             // notify more than one thread (even 5 readers are allowed)
@@ -77,7 +86,9 @@ public class ReadingRoom {
 //        }
         // sleep after reading
         try {
-            writer.wait();
+            synchronized (writer){
+                writer.wait();
+            }
             writer.notify();
             sleep(1000);
         } catch (InterruptedException e) {
