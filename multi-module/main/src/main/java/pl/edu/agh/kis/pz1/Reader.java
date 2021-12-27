@@ -31,8 +31,8 @@ public class Reader extends Thread{
 //            }else{
 //                readLock.wait();
 //            }
-            readLock.wait();
-            System.out.println(Writer.currentThread().getName() + " wants to read.");
+                System.out.println(Writer.currentThread().getName() + " wants to read.");
+                readLock.wait();
                 while(ReadingRoom.writeCount.get() > 0 ||
                         ReadingRoom.readCount.get() >= 5) {
 //                    System.out.println("Reader count v0: " + ReadingRoom.readCount.get());
