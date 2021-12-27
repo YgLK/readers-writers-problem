@@ -8,11 +8,13 @@ public class Writer extends Thread { // seems to work well
     private final Logger LOGGER;
     PipedOutputStream out;
     private final Object writeLock;
+    private final ReadingRoom readingRoom;
 
-    public Writer (PipedOutputStream o, Object writeLock) {
+    public Writer (PipedOutputStream o, Object writeLock, ReadingRoom rr) {
         this.out = o;
         this.LOGGER = Logger.getLogger(Writer.currentThread().getName());
         this.writeLock = writeLock;
+        this.readingRoom = rr;
     }
 
     @Override
@@ -22,18 +24,19 @@ public class Writer extends Thread { // seems to work well
         }
     }
 
-
-
     public void write(Thread writer, Logger LOGGER){
         System.out.println(Writer.currentThread().getName() + " wants to write.");
         synchronized (writeLock){
             try {
-                while(ReadingRoom.writeCount.get() >= 1 || ReadingRoom.readCount.get() >= 1) {}
-                synchronized (writeLock) {
-                    writeLock.notify();
-                }
+//                while(ReadingRoom.writeCount.get() >= 1 || ReadingRoom.readCount.get() >= 1) {}
+                readingRoom.waitingWriteCount.getAndIncrement();
+                writeLock.wait();
+                readingRoom.waitingWriteCount.getAndDecrement();
+//                synchronized (writeLock) {
+//                    writeLock.notify();
+//                }
                 writeStart(writer, LOGGER);
-                sleep(1500);
+//                sleep(1500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -42,11 +45,10 @@ public class Writer extends Thread { // seems to work well
     }
 
     public void writeStart(Thread writer, Logger LOGGER){
-        ReadingRoom.writeCount.getAndIncrement();
-//        System.out.println("Writers count:" + ReadingRoom.writeCount.get());
+//        ReadingRoom.writeCount.getAndIncrement();
         System.out.println(Writer.currentThread().getName() + " has started writing.");
         try {
-            sleep(3000);
+            sleep(1500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -54,17 +56,17 @@ public class Writer extends Thread { // seems to work well
 
     public void writeEnd(Thread writer, Logger LOGGER){
         synchronized (writeLock){
-            ReadingRoom.writeCount.getAndDecrement();
+            readingRoom.writeCount.getAndDecrement();
             System.out.println(Writer.currentThread().getName() + " has stopped writing.\n");
             try {
-                writeLock.wait();
-                sleep(1000);
+//                writeLock.wait();
+                sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        synchronized (ReadingRoom.readLock){
-            ReadingRoom.readLock.notify();
-        }
+//        synchronized (ReadingRoom.readLock){
+//            ReadingRoom.readLock.notify();
+//        }
     }
 }
