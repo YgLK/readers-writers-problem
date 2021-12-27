@@ -7,7 +7,7 @@ public class Reader extends Thread{
     private final Logger LOGGER;
     PipedInputStream in;
     private final Object readLock;
-
+    static boolean isFirst = true;
 
     public Reader(PipedInputStream i, Object readLock) {
         in = i;
@@ -25,19 +25,28 @@ public class Reader extends Thread{
     public void read(Thread reader, Logger LOGGER){
         try {
             synchronized (readLock){
+//            if(isFirst){
+                // continue
+//                isFirst = false;
+//            }else{
+//                readLock.wait();
+//            }
+            readLock.wait();
+            System.out.println(Writer.currentThread().getName() + " wants to read.");
                 while(ReadingRoom.writeCount.get() > 0 ||
                         ReadingRoom.readCount.get() >= 5) {
 //                    System.out.println("Reader count v0: " + ReadingRoom.readCount.get());
                 }
+                ReadingRoom.readCount.getAndIncrement();
                 readLock.notify();
             }
-            synchronized (readLock){
-                if(ReadingRoom.readCount.get() != 0){
-                    readLock.notify();
-                }
-            }
+//            synchronized (readLock){
+//                if(ReadingRoom.readCount.get() != 0){
+//                    readLock.notify();
+//                }
+//            }
             readStart(reader, LOGGER);
-            sleep(4000);
+            sleep(3400);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -45,8 +54,8 @@ public class Reader extends Thread{
     }
 
     public void readStart(Thread reader, Logger LOGGER){
-        ReadingRoom.readCount.getAndIncrement();
-        System.out.println("Readers count:" + ReadingRoom.readCount.get());
+//        ReadingRoom.readCount.getAndIncrement();
+//        System.out.println("Readers count:" + ReadingRoom.readCount.get());
         System.out.println(Writer.currentThread().getName() + " has started reading.");
         try{
             sleep(3000);
@@ -62,9 +71,9 @@ public class Reader extends Thread{
                 ReadingRoom.readCount.getAndDecrement();
                 synchronized (readLock) {
 //                    readLock.notify();
-                    readLock.wait();
+//                    readLock.wait();
                 }
-                System.out.println("Readers count: " + ReadingRoom.readCount);
+//                System.out.println("Readers count: " + ReadingRoom.readCount);
                 sleep(15000);
             } catch (InterruptedException e){
                 e.printStackTrace();

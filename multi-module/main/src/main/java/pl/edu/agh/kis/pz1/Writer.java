@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.PipedOutputStream;
 import java.util.logging.Logger;
 
-public class Writer extends Thread {
+public class Writer extends Thread { // seems to work well
     private final Logger LOGGER;
     PipedOutputStream out;
     private final Object writeLock;
@@ -25,10 +25,13 @@ public class Writer extends Thread {
 
 
     public void write(Thread writer, Logger LOGGER){
+        System.out.println(Writer.currentThread().getName() + " wants to write.");
         synchronized (writeLock){
             try {
                 while(ReadingRoom.writeCount.get() >= 1 || ReadingRoom.readCount.get() >= 1) {}
-                writeLock.notify();
+                synchronized (writeLock) {
+                    writeLock.notify();
+                }
                 writeStart(writer, LOGGER);
                 sleep(1500);
             } catch (InterruptedException e) {
@@ -40,10 +43,10 @@ public class Writer extends Thread {
 
     public void writeStart(Thread writer, Logger LOGGER){
         ReadingRoom.writeCount.getAndIncrement();
-        System.out.println("Writers count:" + ReadingRoom.writeCount.get());
+//        System.out.println("Writers count:" + ReadingRoom.writeCount.get());
         System.out.println(Writer.currentThread().getName() + " has started writing.");
         try {
-            sleep(300);
+            sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -59,6 +62,9 @@ public class Writer extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+        synchronized (ReadingRoom.readLock){
+            ReadingRoom.readLock.notify();
         }
     }
 }

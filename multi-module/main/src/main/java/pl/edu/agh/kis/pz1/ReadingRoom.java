@@ -12,7 +12,7 @@ public class ReadingRoom {
 //    volatile static int readersCount = 0;
     static AtomicInteger readCount = new AtomicInteger(0);
     static Object writeLock = new Object();
-    static Object readLock = new Object();
+    static final Object readLock = new Object();
     static String resource= "";
 
 
