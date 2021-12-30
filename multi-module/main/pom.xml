@@ -42,7 +42,7 @@
         </configuration>
         <executions>
           <execution>
-            <phase>package</phase> 
+            <phase>package</phase>
             <goals>
               <goal>single</goal>
             </goals>
@@ -80,6 +80,38 @@
 
 
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>attributed</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>jacoco-initialize</id>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>jacoco-site</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 
 </project>

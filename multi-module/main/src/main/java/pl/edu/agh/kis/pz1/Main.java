@@ -11,9 +11,9 @@ public class Main {
     public static void main(String[] args) throws IOException {
         ReadingRoom readingRoom = new ReadingRoom();
 
-
         PipedOutputStream out = new PipedOutputStream();
         PipedInputStream in = new PipedInputStream(out);
+
         Writer writer1 = new Writer(out, readingRoom.writeLock, readingRoom);
         Writer writer2 = new Writer(out, readingRoom.writeLock, readingRoom);
         Writer writer3 = new Writer(out, readingRoom.writeLock, readingRoom);
