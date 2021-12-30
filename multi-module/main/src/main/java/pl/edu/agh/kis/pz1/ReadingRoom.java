@@ -30,7 +30,6 @@ public class ReadingRoom {
                     // let writer enter
                     writeLock.notify();
                 }
-//                System.out.println("Writers count: " + this.writeCount);
             }
                 // readers condition
             if(this.writeCount.get() < 1

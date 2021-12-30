@@ -11,6 +11,9 @@ import java.util.UUID;
 public class TextUtils {
 
 
+    private TextUtils(){}
+
+
     public static String sha512Hash(String str) {
         return DigestUtils.sha512Hex(str);
     }
@@ -33,8 +36,9 @@ public class TextUtils {
 
         // For specifying wrong message digest algorithms
         catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+        return "";
     }
     public static String generateRandomHash() {
         return UUID.randomUUID().toString();

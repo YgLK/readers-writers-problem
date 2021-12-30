@@ -5,13 +5,11 @@ import java.util.logging.Logger;
 
 public class Writer extends Thread { // seems to work well
     private final Logger LOGGER;
-    PipedOutputStream out;
     private final Object writeLock;
     private final ReadingRoom readingRoom;
 
-    public Writer (PipedOutputStream o, Object writeLock, ReadingRoom rr) {
-        this.out = o;
-        this.LOGGER = Logger.getLogger(Writer.currentThread().getName());
+    public Writer (Object writeLock, ReadingRoom rr) {
+        this.LOGGER = Logger.getLogger(Thread.currentThread().getName());
         this.writeLock = writeLock;
         this.readingRoom = rr;
     }
@@ -19,12 +17,12 @@ public class Writer extends Thread { // seems to work well
     @Override
     public void run() {
         while(true){
-            write(this, LOGGER);
+            write();
         }
     }
 
-    public void write(Thread writer, Logger LOGGER){
-        System.out.println(Writer.currentThread().getName() + " wants to write.");
+    public void write(){
+        System.out.println(Thread.currentThread().getName() + " wants to write.");
         synchronized (writeLock){
             try {
                 readingRoom.waitingWriteCount.getAndIncrement();
@@ -33,13 +31,13 @@ public class Writer extends Thread { // seems to work well
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            writeStart(writer, LOGGER);
-            writeEnd(writer, LOGGER);
+            writeStart();
+            writeEnd();
         }
     }
 
-    public void writeStart(Thread writer, Logger LOGGER){
-        System.out.println(Writer.currentThread().getName() + " has started writing.");
+    public void writeStart(){
+        System.out.println(Thread.currentThread().getName() + " has started writing.");
         try {
             sleep(1500);
         } catch (InterruptedException e) {
@@ -47,9 +45,9 @@ public class Writer extends Thread { // seems to work well
         }
     }
 
-    public void writeEnd(Thread writer, Logger LOGGER){
+    public void writeEnd(){
         readingRoom.writeCount.getAndDecrement();
-        System.out.println(Writer.currentThread().getName() + " has stopped writing.\n");
+        System.out.println(Thread.currentThread().getName() + " has stopped writing.\n");
         try {
             sleep(8000);
         } catch (InterruptedException e) {
