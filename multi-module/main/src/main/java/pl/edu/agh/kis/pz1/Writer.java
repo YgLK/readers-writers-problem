@@ -35,11 +35,11 @@ public class Writer extends Thread { // seems to work well
 //                synchronized (writeLock) {
 //                    writeLock.notify();
 //                }
-                writeStart(writer, LOGGER);
 //                sleep(1500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            writeStart(writer, LOGGER);
             writeEnd(writer, LOGGER);
         }
     }
@@ -55,16 +55,17 @@ public class Writer extends Thread { // seems to work well
     }
 
     public void writeEnd(Thread writer, Logger LOGGER){
-        synchronized (writeLock){
-            readingRoom.writeCount.getAndDecrement();
-            System.out.println(Writer.currentThread().getName() + " has stopped writing.\n");
-            try {
+//        synchronized (writeLock){
+        readingRoom.writeCount.getAndDecrement();
+        System.out.println(Writer.currentThread().getName() + " has stopped writing.\n");
+        try {
 //                writeLock.wait();
-                sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            sleep(8000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+//        }
+
 //        synchronized (ReadingRoom.readLock){
 //            ReadingRoom.readLock.notify();
 //        }

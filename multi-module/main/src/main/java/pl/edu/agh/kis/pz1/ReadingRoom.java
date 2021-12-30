@@ -43,16 +43,18 @@ public class ReadingRoom {
                 // readers condition
             if(this.writeCount.get() < 1
                 && this.readCount.get() < 5
-//                        && ReadingRoom.waitingWriteCount.getAndDecrement() == 0
+                    // if less than 2 writers waits for their turn
+                && this.waitingWriteCount.get() <= 1
             ) {
                 synchronized (this.readLock){
-//                    this.readCount.incrementAndGet();
+                    this.readCount.incrementAndGet();
 //                    readersCount++;
                     // guard increases count of readers
                     // let reader enter
+                    System.out.println(this.waitingWriteCount.get());
                     readLock.notify();
-                    System.out.println("Readers count: " + this.readCount);
                 }
+                    System.out.println("Readers count: " + this.readCount);
             }
         }
     }
