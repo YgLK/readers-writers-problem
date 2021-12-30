@@ -1,6 +1,5 @@
 package pl.edu.agh.kis.pz1;
 
-import java.io.IOException;
 import java.io.PipedOutputStream;
 import java.util.logging.Logger;
 
@@ -28,14 +27,9 @@ public class Writer extends Thread { // seems to work well
         System.out.println(Writer.currentThread().getName() + " wants to write.");
         synchronized (writeLock){
             try {
-//                while(ReadingRoom.writeCount.get() >= 1 || ReadingRoom.readCount.get() >= 1) {}
                 readingRoom.waitingWriteCount.getAndIncrement();
                 writeLock.wait();
                 readingRoom.waitingWriteCount.getAndDecrement();
-//                synchronized (writeLock) {
-//                    writeLock.notify();
-//                }
-//                sleep(1500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -45,7 +39,6 @@ public class Writer extends Thread { // seems to work well
     }
 
     public void writeStart(Thread writer, Logger LOGGER){
-//        ReadingRoom.writeCount.getAndIncrement();
         System.out.println(Writer.currentThread().getName() + " has started writing.");
         try {
             sleep(1500);
@@ -55,19 +48,12 @@ public class Writer extends Thread { // seems to work well
     }
 
     public void writeEnd(Thread writer, Logger LOGGER){
-//        synchronized (writeLock){
         readingRoom.writeCount.getAndDecrement();
         System.out.println(Writer.currentThread().getName() + " has stopped writing.\n");
         try {
-//                writeLock.wait();
             sleep(8000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        }
-
-//        synchronized (ReadingRoom.readLock){
-//            ReadingRoom.readLock.notify();
-//        }
     }
 }

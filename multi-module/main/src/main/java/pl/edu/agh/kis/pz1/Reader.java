@@ -29,7 +29,6 @@ public class Reader extends Thread{
             synchronized (readLock){
                 readLock.wait();
             }
-//            readingRoom.incrementReadCount();
             readStart(reader, LOGGER);
             readEnd(reader, LOGGER);
         } catch (InterruptedException e) {
@@ -44,17 +43,13 @@ public class Reader extends Thread{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        readingRoom.decrementReadCount();
     }
 
-//    public synchronized void readEnd(Thread reader, Logger LOGGER){
     public void readEnd(Thread reader, Logger LOGGER){
             System.out.println(Writer.currentThread().getName() + " has stopped reading.");
             try {
-//                readingRoom.decrementReadCount();
-                // sleep after reading
+                // rest after reading
                 sleep(10000);
-//                --readingRoom.readersCount;
             } catch (InterruptedException e){
                 e.printStackTrace();
             }
