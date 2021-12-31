@@ -8,6 +8,7 @@ public class ReadingRoom {
     AtomicInteger waitingWriteCount;
     final Object writeLock;
     final Object readLock;
+    boolean startTheGuard;
     static String resource= "";
 
     public ReadingRoom(){
@@ -16,14 +17,14 @@ public class ReadingRoom {
        writeCount = new AtomicInteger(0);
        readCount = new AtomicInteger(0);
        waitingWriteCount = new AtomicInteger(0);
+       startTheGuard = true;
     }
 
     // notifies readers/writers when reading room is available and let them enter
     public void guard(){
-        while(true){
+        while(startTheGuard){
             // writers condition
-            if(this.writeCount.get() < 1
-                    && this.readCount.get() < 1) {
+            if(canWriterEnter()) {
                 synchronized (this.writeLock){
                     // guard increases count of writers
                     this.writeCount.getAndIncrement();
@@ -32,11 +33,7 @@ public class ReadingRoom {
                 }
             }
                 // readers condition
-            if(this.writeCount.get() < 1
-                    && this.readCount.get() < 5
-                    // if less than 2 writers waits for their turn let readers enter
-                    && this.waitingWriteCount.get() <= 1
-            ) {
+            if(canReaderEnter()) {
                 synchronized (this.readLock){
                     // guard increases count of readers
                     this.readCount.incrementAndGet();
@@ -45,6 +42,18 @@ public class ReadingRoom {
                 }
             }
         }
+    }
+
+    public boolean canWriterEnter(){
+        return this.writeCount.get() < 1
+                && this.readCount.get() < 1;
+    }
+
+    public boolean canReaderEnter(){
+        return this.writeCount.get() < 1
+                && this.readCount.get() < 5
+                // if less than 3 writers waits for their turn let readers enter
+                && this.waitingWriteCount.get() <= 2;
     }
 
     public void decrementReadCount(){
@@ -58,4 +67,23 @@ public class ReadingRoom {
             this.readCount.incrementAndGet();
         }
     }
+
+    public int getReadCountValue(){
+        return this.readCount.get();
+    }
+
+
+    public void setReadCountValue(int value){
+        this.readCount.set(value);
+    }
+
+
+    public void setWriteCountValue(int value){
+        this.writeCount.set(value);
+    }
+
+    public void setWaitingWriteCount(int value){
+        this.waitingWriteCount.set(value);
+    }
+
 }
