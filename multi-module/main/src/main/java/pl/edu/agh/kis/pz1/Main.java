@@ -1,19 +1,29 @@
 package pl.edu.agh.kis.pz1;
-import java.io.IOException;
 
 
 /**
- * Przykładowy kod do zajęć laboratoryjnych 2, 3, 4 z przedmiotu: Programowanie zaawansowane 1
- * @author Paweł Skrzyński
+ * Main class in which the
+ * Readers-Writers Problem is run.
+ *
  */
 public class Main {
-    public static void main(String[] args) throws IOException {
+    /**
+     * Main method creates 3 writers
+     * and 10 readers. Also, ReadingRoom
+     * is created in which writers and readers
+     * do their jobs.
+     *
+     * @param args
+     */
+    public static void main(String[] args){
+        // create Reading Room
         ReadingRoom readingRoom = new ReadingRoom();
 
-
+        // create 3 Writers
         Writer writer1 = new Writer(readingRoom.writeLock, readingRoom);
         Writer writer2 = new Writer(readingRoom.writeLock, readingRoom);
         Writer writer3 = new Writer(readingRoom.writeLock, readingRoom);
+        // create 10 Readers
         Reader reader1 = new Reader(readingRoom.readLock, readingRoom);
         Reader reader2 = new Reader(readingRoom.readLock, readingRoom);
         Reader reader3 = new Reader(readingRoom.readLock, readingRoom);
@@ -24,11 +34,11 @@ public class Main {
         Reader reader8 = new Reader(readingRoom.readLock, readingRoom);
         Reader reader9 = new Reader(readingRoom.readLock, readingRoom);
         Reader reader10 = new Reader(readingRoom.readLock, readingRoom);
-        // run writers
+        // run Writers
         writer1.start();
         writer2.start();
         writer3.start();
-        // run readers
+        // run Readers
         reader1.start();
         reader2.start();
         reader3.start();
@@ -40,6 +50,7 @@ public class Main {
         reader9.start();
         reader10.start();
 
+        // invoke Guard which takes care of rules of the problem
         readingRoom.guard();
     }
 }
