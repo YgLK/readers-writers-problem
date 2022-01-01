@@ -5,6 +5,7 @@ package pl.edu.agh.kis.pz1;
  * Main class in which the
  * Readers-Writers Problem is run.
  *
+ * @author Jakub Szpunar
  */
 public class Main {
     /**
@@ -50,7 +51,7 @@ public class Main {
         reader9.start();
         reader10.start();
 
-        // invoke Guard which takes care of rules of the problem
+        // invoke Guard which takes care of following the rules of the problem
         readingRoom.guard();
     }
 }
