@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public class Writer extends Thread {
     /** announces logs */
     private final Logger LOGGER;
-    /** allows access for write-only operation*/
+    /** allows access for write-only operation */
     private final Object writeLock;
     /** Reader is going to read there */
     private final ReadingRoom readingRoom;

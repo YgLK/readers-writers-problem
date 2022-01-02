@@ -5,7 +5,9 @@ package pl.edu.agh.kis.pz1;
  * Main class in which the
  * Readers-Writers Problem is run.
  *
- * @author Jakub Szpunar
+ * @author  Jakub Szpunar
+ * @version 1.0
+ * @since   2022-01-02
  */
 public class Main {
     /**

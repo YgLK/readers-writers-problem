@@ -20,9 +20,9 @@ public class ReadingRoom {
     AtomicInteger readCount;
     /** how many writers wait to enter the room */
     AtomicInteger waitingWriteCount;
-    /** allows access for write-only operation*/
+    /** allows access for write-only operation */
     final Object writeLock;
-    /** allows access for read-only operation*/
+    /** allows access for read-only operation */
     final Object readLock;
     /** informs if Guard can start */
     boolean startTheGuard;
