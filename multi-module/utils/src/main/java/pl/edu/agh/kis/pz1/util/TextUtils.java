@@ -6,6 +6,8 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class used for generating
@@ -13,6 +15,7 @@ import java.util.UUID;
  *
  */
 public class TextUtils {
+    private static final Logger logger = Logger.getLogger(Thread.currentThread().getName());
 
     /**
      * Private Constructor to avoid
@@ -56,7 +59,7 @@ public class TextUtils {
 
         // For specifying wrong message digest algorithms
         catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Exception has been thrown", e);
         }
         return "";
     }

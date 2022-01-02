@@ -1,46 +1,43 @@
-1. Przykład wygenerowany na bazie archetypu (moduł main):
-   com.github.charlie-cityu.archetypes:docs-city-archetype-quickstart
-   (A variation on the maven-archetype-quickstart with source set to 1.8,
-    build to executable jar with dependencies and junit 4.12. File names have been changed
-    to Main.java and MainTest.java. Directory structure remains consistent with the Maven
-    standard.)
+    Readers-Writer Problem
 
-2. Przyład buduje plik jar z zależnościami - posiada dodaną zależność (z lab. 3 i lab. 4):
+Short description of the problem:
+    There is a shared resource which should be accessed by multiple processes.
+There are two types of processes in this context. They are reader and writer.
+Any number of readers can read from the shared resource simultaneously,
+but only one writer can write to the shared resource. When a writer is
+writing data to the resource, no other process can access the resource.
+A writer cannot write to the resource if there are non-zero number of
+readers accessing the resource at that time. [Source:
+https://www.studytonight.com/operating-system/readers-writer-problem]
+    In my implementation of the problem there are 10 Readers and 3 Writers.
+Only 1 Writer can have access to the resource and write the data.
+Readers number is also limited - only 5 Readers can read from the resource in the
+same time. A writer cannot write to the resource if there are non-zero number of
+readers accessing the resource at that time. Similarly, if writer has access to the
+resource, then no Readers can read from it. After reading/writing, every person
+takes short break to 'have energy' for the next reading/writing session.
 
-3. Został dodany moduł utils oraz macierzysty plik pom.xml okreslający, że projekt składa się z modułów:
 
-  <modules>
-      <module>utils</module>
-      <module>main</module>
-  </modules>
+    How to run Readers-Writers Problem?
+1. Build the project with Maven.
+2. Find target directory in the main module.
+3. Run the problem from your terminal after moving to the target directory in the main
+ module by entering this command:
+    java -jar .\main-1.0-jar-with-dependencies.jar
+4. Watch how Readers and Writers according to the given rules change their turns repeatedly
+in the endless loop.
+
+PS. On Win10 sometimes only one thread is running after running the JAR file (wait up to 4 sec). In that case
+you can try to re-run the JAR with the same command (up to 5 tries) or use an IDE (such as Intellij IDEA)
+and run main method in the Main class.
 
 
-  <dependencyManagement>
-      <dependencies>
-          <dependency>
-              <groupId>pl.edu.agh.kis.pz1</groupId>
-              <artifactId>main</artifactId>
-              <version>${project.version}</version>
-          </dependency>
-          <dependency>
-              <groupId>pl.edu.agh.kis.pz1</groupId>
-              <artifactId>utils</artifactId>
-              <version>${project.version}</version>
-          </dependency>
-      </dependencies>
-  </dependencyManagement>
-  
-4. W pom.xml modułów jest odwołanie do pliku macierzystego:
-  <parent>	
-    <groupId>pl.edu.agh.kis.pz1</groupId>
-    <artifactId>multi-module</artifactId>
-    <version>1.0</version>
-  </parent>  
-  
-5. Paczka wykonywalna znajduje sie w module main, który ma dodaną zależność od modułu utils gdyż wykorzystje klasę tam zdefiniowaną - w sekcji <dependencies> dodano:
-
-    <dependency>
-        <groupId>pl.edu.agh.kis.pz1</groupId>
-        <artifactId>utils</artifactId>
-        <version>${project.version}</version>
-    </dependency>
+    Messages sent by the server:
+"Thread-0 wants to write." - Writer thread #0 is ready to start writing the data to the resource.
+"Thread-0 started writing." - Writer thread #0 has been notified and started writing.
+"Thread-0 stopped writing." - Writer thread #0 stopped writing and is going to rest for a while (sleep).
+                              After the resting thread immediately wants to write.
+"Thread-1 wants to read." - Reader thread #0 is ready to start reading the data from the resource.
+"Thread-1 started reading." - Reader thread #0 has been notified and started reading.
+"Thread-1 stopped reading." - Reader thread #0 stopped reading and is going to rest for a while (sleep).
+                              After the resting thread immediately wants to read.

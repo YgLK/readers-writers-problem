@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 
 /**
- * Class representation of the Reader
+ * Class representing the Reader
  * in the Readers-Writers Problem.
  *
  */
@@ -23,7 +23,8 @@ public class Reader extends Thread{
 
     /**
      * Reader constructor. Creates reader
-     * connected to readLock.
+     * connected to readLock which will notify
+     * him when Reading Room is available.
      *
      * @param readLock Lock monitoring waiting/reading
      *                 Readers
@@ -60,10 +61,11 @@ public class Reader extends Thread{
             out.println(Thread.currentThread().getName() + " wants to read.");
             synchronized (readLock){
                 boolean tmp = true;
-                if(!cannotEnter){
-                    tmp = false;
-                }
                 do{
+                    // if READER can enter change tmp value
+                    if(!cannotEnter){
+                    tmp = false;
+                    }
                     /* wait for the notification that entering
                      Reading Room is available */
                     readLock.wait();
@@ -87,7 +89,7 @@ public class Reader extends Thread{
      */
     public void readStart(){
         // inform that reader started reading
-        out.println(Thread.currentThread().getName() + " has started reading.");
+        out.println(Thread.currentThread().getName() + " started reading.");
         // reading time
         threadSleep(1133);
     }
@@ -100,9 +102,9 @@ public class Reader extends Thread{
      */
     public void readEnd(){
             // inform that reader stopped reading
-            out.println(Thread.currentThread().getName() + " has stopped reading.");
+            out.println(Thread.currentThread().getName() + " stopped reading.");
             // rest after reading
-            threadSleep(2000);
+            threadSleep(1500);
             readingRoom.decrementReadCount();
     }
 
@@ -112,7 +114,7 @@ public class Reader extends Thread{
      *
      * @param sleepLength length of sleep
      *
-     * @return true if sleep complete successfully
+     * @return true if sleep is complete successfully
      */
     public boolean threadSleep(int sleepLength){
         try {

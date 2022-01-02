@@ -3,15 +3,15 @@ package pl.edu.agh.kis.pz1;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Class representation of the Reading Room
- * in the Readers-Writers Problem. Represents
+ * Class representing the Reading Room
+ * in the Readers-Writers Problem. It's
  * place where Readers and Writers come to read/write.
  *
  * Reading Room's maximum capacity is
  * 1 Writer or 5 Readers at a time.
  * Writers can't enter Reading Room when
  * Readers are inside, and similarly when
- * Writers are inside, no Readers can enter.
+ * Writer is inside, no Readers can enter.
  */
 public class ReadingRoom {
     /** how many writers are in the room */
@@ -45,11 +45,12 @@ public class ReadingRoom {
     }
 
     /**
-     * The method symbolise Guard staying in front of the Reading Room.
+     * The method symbolise Guard staying in front of the Reading Room
+     * who prevents coming writers/readers from breaking the problem's rules.
      * He let Readers or Writers to enter Reading Room on condition that
      * there is available space for them.
      *
-     * Guard notifies readers/writers when reading room is available and let them enter.
+     * Guard notifies readers/writers when reading room is available and lets them enter in.
      *
      */
     public void guard(){
@@ -83,8 +84,10 @@ public class ReadingRoom {
      *
      * Writer can enter Reading Room if:
      *  - there are no Writers currently
+     *  in the Reading Room
      *      and
      *  - there are no Readers currently
+     * in the Reading Room
      *
      * @return boolean
      *          true:  Writer can enter Reading Room
@@ -101,8 +104,14 @@ public class ReadingRoom {
      *
      * Reader can enter Reading Room if:
      *  - there are no Writers currently
+     *  in the Reading Room
      *      and
      *  - there are less than 5 Readers currently
+     * in the Reading Room
+     *     and
+     * - there are less than 3 writers waiting for
+     * their turn (condition added to avoid writers'
+     * starvation)
      *
      * @return boolean
      *          true:  Reader can enter Reading Room
@@ -126,7 +135,7 @@ public class ReadingRoom {
     }
 
     /**
-     * The method used for decrementing the actual
+     * The method used for incrementing the actual
      * number of reading Readers.
      */
     public void incrementReadCount(){
@@ -165,7 +174,7 @@ public class ReadingRoom {
         this.waitingWriteCount.set(value);
     }
 
-    /** @return counter of Writers waiting for entering the Reading Room */
+    /** @return counter of Writers waiting to enter the Reading Room */
     public AtomicInteger getWaitingWriteCount(){
         return this.waitingWriteCount;
     }
@@ -178,5 +187,10 @@ public class ReadingRoom {
     /** @return readLock connected with the current ReadingRoom */
     public Object getReadLock() {
         return readLock;
+    }
+
+    /** @return used problem resource  */
+    public String getResource(){
+        return resource;
     }
 }

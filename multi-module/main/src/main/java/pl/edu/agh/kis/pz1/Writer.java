@@ -24,16 +24,17 @@ public class Writer extends Thread {
 
     /**
      * Writer constructor. Creates writer
-     * connected with writeLock.
+     * connected with writeLock which will notify
+     * him when Reading Room is available.
      *
      * @param writeLock Lock which monitors writers writing
      *                  and eager to write
-     * @param rr Reading Room in which Writer is going to read
+     * @param readingRoom Reading Room in which Writer is going to read
      */
-    public Writer (Object writeLock, ReadingRoom rr) {
+    public Writer (Object writeLock, ReadingRoom readingRoom) {
         this.logger = Logger.getLogger(Thread.currentThread().getName());
         this.writeLock = writeLock;
-        this.readingRoom = rr;
+        this.readingRoom = readingRoom;
     }
 
     /**
@@ -63,10 +64,11 @@ public class Writer extends Thread {
                 // increment counter of waiting writers
                 readingRoom.getWaitingWriteCount().getAndIncrement();
                 boolean tmp = true;
-                if(!cannotEnter){
-                    tmp = false;
-                }
                 do{
+                    // if WRITER can enter change tmp value
+                    if(!cannotEnter){
+                    tmp = false;
+                    }
                     /* wait for the notification that entering
                      Reading Room is available */
                     writeLock.wait();
@@ -92,7 +94,7 @@ public class Writer extends Thread {
      */
     public void writeStart (){
         // inform that writer started writing
-        out.println(Thread.currentThread().getName() + " has started writing.");
+        out.println(Thread.currentThread().getName() + " started writing.");
         // writing time
         threadSleep(500);
     }
@@ -106,9 +108,9 @@ public class Writer extends Thread {
     public void writeEnd(){
         readingRoom.getWriteCount().getAndDecrement();
         // inform that writer stopped writing
-        out.println(Thread.currentThread().getName() + " has stopped writing.\n");
+        out.println(Thread.currentThread().getName() + " stopped writing.\n");
         // sleep after writing
-        threadSleep(1600);
+        threadSleep(2500);
     }
 
     /**
@@ -117,7 +119,7 @@ public class Writer extends Thread {
      *
      * @param sleepLength length of sleep
      *
-     * @return true if sleep complete successfully
+     * @return true if sleep is complete successfully
      */
     public boolean threadSleep(int sleepLength){
         try {
