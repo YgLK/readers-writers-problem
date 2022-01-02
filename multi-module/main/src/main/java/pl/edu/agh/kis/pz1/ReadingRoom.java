@@ -15,19 +15,19 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ReadingRoom {
     /** how many writers are in the room */
-    AtomicInteger writeCount;
+    private AtomicInteger writeCount;
     /** how many readers are in the room */
-    AtomicInteger readCount;
+    private AtomicInteger readCount;
     /** how many writers wait to enter the room */
-    AtomicInteger waitingWriteCount;
+    private AtomicInteger waitingWriteCount;
     /** allows access for write-only operation */
-    final Object writeLock;
+    private final Object writeLock;
     /** allows access for read-only operation */
-    final Object readLock;
+    private final Object readLock;
     /** informs if Guard can start */
-    boolean startTheGuard;
+    private boolean startTheGuard;
     /** primitive resource */
-    static String resource= "";
+    private String resource= "";
 
     /**
      * Reading Room constructor.
@@ -135,32 +135,48 @@ public class ReadingRoom {
         }
     }
 
-    /**
-     * @return current number of Readers in the Reading Room
-     */
+    /** @return current number of Readers in the Reading Room */
     public int getReadCountValue(){
         return this.readCount.get();
     }
 
-    /**
-     * @param value to set current number of Readers in the Reading Room
-     */
+    /** @param value to set current number of Readers in the Reading Room */
     public void setReadCountValue(int value){
         this.readCount.set(value);
     }
 
-    /**
-     * @param value to set current number of Writers in the Reading Room
-     */
+    /** @return counter of Readers in the Reading Room */
+    public AtomicInteger getReadCount(){
+        return this.readCount;
+    }
+
+    /** @param value to set current number of Writers in the Reading Room */
     public void setWriteCountValue(int value){
         this.writeCount.set(value);
     }
 
-    /**
-     * @param value to set current number of Writers waiting to enter the Reading Room
-     */
+    /** @return counter of Writers in the Reading Room */
+    public AtomicInteger getWriteCount(){
+        return this.writeCount;
+    }
+
+    /** @param value to set current number of Writers waiting to enter the Reading Room */
     public void setWaitingWriteCount(int value){
         this.waitingWriteCount.set(value);
     }
 
+    /** @return counter of Writers waiting for entering the Reading Room */
+    public AtomicInteger getWaitingWriteCount(){
+        return this.waitingWriteCount;
+    }
+
+    /** @return writeLock connected with the current ReadingRoom */
+    public Object getWriteLock() {
+        return writeLock;
+    }
+
+    /** @return readLock connected with the current ReadingRoom */
+    public Object getReadLock() {
+        return readLock;
+    }
 }

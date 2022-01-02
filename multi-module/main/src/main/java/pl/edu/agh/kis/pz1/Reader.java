@@ -12,27 +12,27 @@ import java.util.logging.Logger;
  */
 public class Reader extends Thread{
     /** announces logs */
-    private final Logger LOGGER;
+    private final Logger logger;
     /** allows access for read-only operation*/
     private final Object readLock;
     /** Reader is going to read there */
     private final ReadingRoom readingRoom;
     private static boolean cannotEnter = false;
     /** replacement of System.out with shorter name */
-    PrintStream out = System.out;
+    private final PrintStream out = System.out;
 
     /**
      * Reader constructor. Creates reader
      * connected to readLock.
      *
-     * @param readLock Lock which monitors readers reading
-     *                 and eager to read
-     * @param rr Reading Room in which Reader is going to read
+     * @param readLock Lock monitoring waiting/reading
+     *                 Readers
+     * @param readingRoom Reading Room in which Reader is going to read
      */
-    public Reader(Object readLock, ReadingRoom rr) {
-        LOGGER = Logger.getLogger(Thread.currentThread().getName());
+    public Reader(Object readLock, ReadingRoom readingRoom) {
+        logger = Logger.getLogger(Thread.currentThread().getName());
         this.readLock = readLock;
-        this.readingRoom = rr;
+        this.readingRoom = readingRoom;
     }
 
     /**
@@ -75,7 +75,7 @@ public class Reader extends Thread{
         } catch (InterruptedException e) {
             // interrupt current thread if Interrupted Exception occurred
             Thread.currentThread().interrupt();
-            LOGGER.log(Level.WARNING, "Interrupted exception occurred.", e);
+            logger.log(Level.WARNING, "Interrupted exception occurred.", e);
         }
     }
 
@@ -89,7 +89,7 @@ public class Reader extends Thread{
         // inform that reader started reading
         out.println(Thread.currentThread().getName() + " has started reading.");
         // reading time
-        threadSleep(3400);
+        threadSleep(1133);
     }
 
     /**
@@ -102,7 +102,7 @@ public class Reader extends Thread{
             // inform that reader stopped reading
             out.println(Thread.currentThread().getName() + " has stopped reading.");
             // rest after reading
-            threadSleep(10000);
+            threadSleep(2000);
             readingRoom.decrementReadCount();
     }
 
@@ -119,7 +119,7 @@ public class Reader extends Thread{
             sleep(sleepLength);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            LOGGER.log(Level.WARNING, "Interrupted exception occurred.", e);
+            logger.log(Level.WARNING, "Interrupted exception occurred.", e);
         }
         return true;
     }

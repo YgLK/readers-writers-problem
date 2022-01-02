@@ -20,6 +20,14 @@ public class MainTest {
         Main main = new Main();
         assertNotNull("Main method called.", main);
     }
+
+
+//    @Test
+//    public void shouldReadPrintStartEndMessages(){
+//        Main.main(null);
+//
+//    }
+
 }
 
 

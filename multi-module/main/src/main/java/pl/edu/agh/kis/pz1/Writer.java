@@ -12,14 +12,14 @@ import java.util.logging.Logger;
  */
 public class Writer extends Thread {
     /** announces logs */
-    private final Logger LOGGER;
+    private final Logger logger;
     /** allows access for write-only operation */
     private final Object writeLock;
     /** Reader is going to read there */
     private final ReadingRoom readingRoom;
     private static boolean cannotEnter = false;
     /** replacement of System.out with shorter name */
-    PrintStream out = System.out;
+    private final PrintStream out = System.out;
 
 
     /**
@@ -31,7 +31,7 @@ public class Writer extends Thread {
      * @param rr Reading Room in which Writer is going to read
      */
     public Writer (Object writeLock, ReadingRoom rr) {
-        this.LOGGER = Logger.getLogger(Thread.currentThread().getName());
+        this.logger = Logger.getLogger(Thread.currentThread().getName());
         this.writeLock = writeLock;
         this.readingRoom = rr;
     }
@@ -61,7 +61,7 @@ public class Writer extends Thread {
         synchronized (writeLock){
             try {
                 // increment counter of waiting writers
-                readingRoom.waitingWriteCount.getAndIncrement();
+                readingRoom.getWaitingWriteCount().getAndIncrement();
                 boolean tmp = true;
                 if(!cannotEnter){
                     tmp = false;
@@ -72,11 +72,11 @@ public class Writer extends Thread {
                     writeLock.wait();
                 }while(tmp);
                 // decrement counter of waiting writers after writer enters the Reading Room
-                readingRoom.waitingWriteCount.getAndDecrement();
+                readingRoom.getWaitingWriteCount().getAndDecrement();
             } catch (InterruptedException e) {
                 // interrupt current thread if Interrupted Exception occurred
                 Thread.currentThread().interrupt();
-                LOGGER.log(Level.WARNING, "Interrupted exception occurred.", e);
+                logger.log(Level.WARNING, "Interrupted exception occurred.", e);
             }
             // writing session
             writeStart();
@@ -94,7 +94,7 @@ public class Writer extends Thread {
         // inform that writer started writing
         out.println(Thread.currentThread().getName() + " has started writing.");
         // writing time
-        threadSleep(1500);
+        threadSleep(500);
     }
 
     /**
@@ -104,11 +104,11 @@ public class Writer extends Thread {
      *
      */
     public void writeEnd(){
-        readingRoom.writeCount.getAndDecrement();
+        readingRoom.getWriteCount().getAndDecrement();
         // inform that writer stopped writing
         out.println(Thread.currentThread().getName() + " has stopped writing.\n");
         // sleep after writing
-        threadSleep(8000);
+        threadSleep(1600);
     }
 
     /**
@@ -124,7 +124,7 @@ public class Writer extends Thread {
             sleep(sleepLength);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            LOGGER.log(Level.WARNING, "Interrupted exception occurred.", e);
+            logger.log(Level.WARNING, "Interrupted exception occurred.", e);
         }
         return true;
     }

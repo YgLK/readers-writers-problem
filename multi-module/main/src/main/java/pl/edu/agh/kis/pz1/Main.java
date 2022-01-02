@@ -23,20 +23,20 @@ public class Main {
         ReadingRoom readingRoom = new ReadingRoom();
 
         // create 3 Writers
-        Writer writer1 = new Writer(readingRoom.writeLock, readingRoom);
-        Writer writer2 = new Writer(readingRoom.writeLock, readingRoom);
-        Writer writer3 = new Writer(readingRoom.writeLock, readingRoom);
+        Writer writer1 = new Writer(readingRoom.getWriteLock(), readingRoom);
+        Writer writer2 = new Writer(readingRoom.getWriteLock(), readingRoom);
+        Writer writer3 = new Writer(readingRoom.getWriteLock(), readingRoom);
         // create 10 Readers
-        Reader reader1 = new Reader(readingRoom.readLock, readingRoom);
-        Reader reader2 = new Reader(readingRoom.readLock, readingRoom);
-        Reader reader3 = new Reader(readingRoom.readLock, readingRoom);
-        Reader reader4 = new Reader(readingRoom.readLock, readingRoom);
-        Reader reader5 = new Reader(readingRoom.readLock, readingRoom);
-        Reader reader6 = new Reader(readingRoom.readLock, readingRoom);
-        Reader reader7 = new Reader(readingRoom.readLock, readingRoom);
-        Reader reader8 = new Reader(readingRoom.readLock, readingRoom);
-        Reader reader9 = new Reader(readingRoom.readLock, readingRoom);
-        Reader reader10 = new Reader(readingRoom.readLock, readingRoom);
+        Reader reader1 = new Reader(readingRoom.getReadLock(), readingRoom);
+        Reader reader2 = new Reader(readingRoom.getReadLock(), readingRoom);
+        Reader reader3 = new Reader(readingRoom.getReadLock(), readingRoom);
+        Reader reader4 = new Reader(readingRoom.getReadLock(), readingRoom);
+        Reader reader5 = new Reader(readingRoom.getReadLock(), readingRoom);
+        Reader reader6 = new Reader(readingRoom.getReadLock(), readingRoom);
+        Reader reader7 = new Reader(readingRoom.getReadLock(), readingRoom);
+        Reader reader8 = new Reader(readingRoom.getReadLock(), readingRoom);
+        Reader reader9 = new Reader(readingRoom.getReadLock(), readingRoom);
+        Reader reader10 = new Reader(readingRoom.getReadLock(), readingRoom);
         // run Writers
         writer1.start();
         writer2.start();

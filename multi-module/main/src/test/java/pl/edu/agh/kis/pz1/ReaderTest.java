@@ -39,20 +39,20 @@ public class ReaderTest {
 
     @Test
     public void shouldCreateWriter(){
-        Reader reader = new Reader(readingRoom.readLock, readingRoom);
+        Reader reader = new Reader(readingRoom.getReadLock(), readingRoom);
         assertNotNull("Writer instance is not properly created", reader);
     }
 
     @Test
     public void shouldSleepReturnTrue(){
-        Reader reader = new Reader(readingRoom.readLock, readingRoom);
+        Reader reader = new Reader(readingRoom.getReadLock(), readingRoom);
         boolean testBool = reader.threadSleep(1);
         assertTrue("threadSleep method should return true if run successfully", testBool);
     }
 
     @Test
     public void shouldPrintStartWritingMessage(){
-        Reader reader = new Reader(readingRoom.readLock, readingRoom);
+        Reader reader = new Reader(readingRoom.getReadLock(), readingRoom);
         reader.readStart();
         assertTrue("startWrite method should print specified message.",
                 outContent.toString().contains(" has started reading."));
@@ -60,7 +60,7 @@ public class ReaderTest {
 
     @Test
     public void shouldPrintEndWritingMessage(){
-        Reader reader = new Reader(readingRoom.readLock, readingRoom);
+        Reader reader = new Reader(readingRoom.getReadLock(), readingRoom);
         reader.readEnd();
         assertTrue("startWrite method should print specified message.",
                 outContent.toString().contains(" has stopped reading."));
