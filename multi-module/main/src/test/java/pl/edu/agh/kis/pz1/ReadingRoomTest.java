@@ -5,7 +5,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-
+/**
+ * Class used for testing Reading Room
+ * methods and functionalities.
+ */
 public class ReadingRoomTest{
     ReadingRoom readingRoom;
 
@@ -53,7 +56,7 @@ public class ReadingRoomTest{
     public void testIncrementReadCount(){
         int beforeValue = readingRoom.getReadCountValue();
         readingRoom.incrementReadCount();
-        assertEquals("ReadCount should increment",
+        assertEquals("ReadCount should be incremented",
                 beforeValue + 1,
                 readingRoom.getReadCountValue());
     }
@@ -62,7 +65,7 @@ public class ReadingRoomTest{
     public void testDecrementReadCount(){
         int beforeValue = readingRoom.getReadCountValue();
         readingRoom.decrementReadCount();
-        assertEquals("ReadCount should increment",
+        assertEquals("ReadCount should be incremented",
                 beforeValue - 1,
                 readingRoom.getReadCountValue());
     }

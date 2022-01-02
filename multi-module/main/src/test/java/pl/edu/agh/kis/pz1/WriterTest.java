@@ -11,6 +11,10 @@ import java.io.PrintStream;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Class used for testing Writer
+ * methods and functionalities.
+ */
 public class WriterTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
