@@ -5,18 +5,17 @@
 
     <parent>	
       <groupId>pl.edu.agh.kis.pz1</groupId>
-      <artifactId>multi-module</artifactId>
+      <artifactId>readers-writers-problem</artifactId>
       <version>1.0</version>
     </parent>	
 
     <artifactId>utils</artifactId>
     <packaging>jar</packaging>
 
-    <name>Modul na klasy uzytkowe</name>
+    <name>Utility classes module</name>
 
     <dependencies>
 
-        <!-- Dodane przez pskrzynski na potrzeby przykladu do zajec laboratoryjnych -->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>

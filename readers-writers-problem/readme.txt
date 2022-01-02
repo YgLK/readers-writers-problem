@@ -23,13 +23,13 @@ takes short break to 'have energy' for the next reading/writing session.
 2. Find target directory in the main module.
 3. Run the problem from your terminal after moving to the target directory in the main
  module by entering this command:
-    java -jar .\main-1.0-jar-with-dependencies.jar
+    java -jar .\rw-problem-1.0-jar-with-dependencies.jar
 4. Watch how Readers and Writers according to the given rules change their turns repeatedly
 in the endless loop.
 
 PS. On Win10 sometimes only one thread is running after running the JAR file (wait up to 4 sec). In that case
 you can try to re-run the JAR with the same command (up to 5 tries) or use an IDE (such as Intellij IDEA)
-and run main method in the Main class.
+and run main method in the Main class in the rw-problem module.
 
 
     Messages sent by the server:

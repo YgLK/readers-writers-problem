@@ -11,11 +11,12 @@ import java.io.PrintStream;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+
 /**
- * Class used for testing Writer
+ * Class used for testing Reader
  * methods and functionalities.
  */
-public class WriterTest {
+public class ReaderTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
@@ -38,30 +39,30 @@ public class WriterTest {
 
     @Test
     public void shouldCreateWriter(){
-        Writer writer = new Writer(readingRoom.getWriteLock(), readingRoom);
-        assertNotNull("Writer instance is not properly created", writer);
+        Reader reader = new Reader(readingRoom.getReadLock(), readingRoom);
+        assertNotNull("Writer instance is not properly created", reader);
     }
 
     @Test
     public void shouldSleepReturnTrue(){
-        Writer writer = new Writer(readingRoom.getWriteLock(), readingRoom);
-        boolean testBool = writer.threadSleep(1);
+        Reader reader = new Reader(readingRoom.getReadLock(), readingRoom);
+        boolean testBool = reader.threadSleep(1);
         assertTrue("threadSleep method should return true if run successfully", testBool);
     }
 
     @Test
     public void shouldPrintStartWritingMessage(){
-        Writer writer = new Writer(readingRoom.getWriteLock(), readingRoom);
-        writer.writeStart();
+        Reader reader = new Reader(readingRoom.getReadLock(), readingRoom);
+        reader.readStart();
         assertTrue("startWrite method should print specified message.",
-                outContent.toString().contains(" has started writing."));
+                outContent.toString().contains(" started reading."));
     }
 
     @Test
     public void shouldPrintEndWritingMessage(){
-        Writer writer = new Writer(readingRoom.getWriteLock(), readingRoom);
-        writer.writeEnd();
+        Reader reader = new Reader(readingRoom.getReadLock(), readingRoom);
+        reader.readEnd();
         assertTrue("startWrite method should print specified message.",
-                outContent.toString().contains(" has stopped writing."));
+                outContent.toString().contains(" stopped reading."));
     }
 }

@@ -2,13 +2,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>pl.edu.agh.kis.pz1</groupId>
-  <artifactId>multi-module</artifactId>
+  <artifactId>readers-writers-problem</artifactId>
   <version>1.0</version>
 
-  <name>Przyklad - aplikacja wielomodulowa</name>
+  <name>Readers-Writers problem</name>
   <packaging>pom</packaging>
 
-  <!-- Dodane przez pskrzynski -->
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -20,7 +19,7 @@
 
   <modules>
       <module>utils</module>
-      <module>main</module>
+      <module>rw-problem</module>
   </modules>
 
 
@@ -29,7 +28,7 @@
 
           <dependency>
               <groupId>pl.edu.agh.kis.pz1</groupId>
-              <artifactId>main</artifactId>
+              <artifactId>rw-problem</artifactId>
               <version>${project.version}</version>
           </dependency>
           <dependency>

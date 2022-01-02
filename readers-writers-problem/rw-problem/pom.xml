@@ -4,14 +4,13 @@
 
   <parent>	
     <groupId>pl.edu.agh.kis.pz1</groupId>
-    <artifactId>multi-module</artifactId>
+    <artifactId>readers-writers-problem</artifactId>
     <version>1.0</version>
   </parent>
 
-  <artifactId>main</artifactId>
-  <name>Modul glowny aplikacji - klasa Main z metoda main</name>
+  <artifactId>rw-problem</artifactId>
+  <name>Main module of the readers-writers problem.</name>
 
-  <!-- Dodane przez pskrzynski -->
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -29,7 +28,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.3.0</version> <!-- podbita wersja z 2.6 na 3.3.0 by pskrzynski -->
+        <version>3.3.0</version>
         <configuration>
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
