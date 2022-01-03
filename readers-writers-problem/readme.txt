@@ -41,3 +41,5 @@ and run main method in the Main class in the rw-problem module.
 "Thread-1 started reading." - Reader thread #0 has been notified and started reading.
 "Thread-1 stopped reading." - Reader thread #0 stopped reading and is going to rest for a while (sleep).
                               After the resting thread immediately wants to read.
+"Writers: X/Y Readers: Z/W" - X Writers wait for writing, Y Writers are writing right now.
+			                  Z Readers wait for reading, W Readers are reading right now.

@@ -58,13 +58,14 @@ public class Reader extends Thread{
      */
     public void read(){
         try {
+            readingRoom.getWaitingReadCount().incrementAndGet();
             out.println(Thread.currentThread().getName() + " wants to read.");
             synchronized (readLock){
                 boolean tmp = true;
                 do{
                     // if READER can enter change tmp value
                     if(!cannotEnter){
-                    tmp = false;
+                        tmp = false;
                     }
                     /* wait for the notification that entering
                      Reading Room is available */
@@ -72,13 +73,10 @@ public class Reader extends Thread{
                 }while(tmp);
             }
             // reading session
-            readStart();
-            readEnd();
-        } catch (InterruptedException e) {
+            readingRoom.getWaitingReadCount().decrementAndGet();
+            readStart(); readEnd();
             // interrupt current thread if Interrupted Exception occurred
-            Thread.currentThread().interrupt();
-            logger.log(Level.WARNING, "Interrupted exception occurred.", e);
-        }
+        } catch (InterruptedException e) { Thread.currentThread().interrupt(); logger.log(Level.WARNING, "Interrupted exception occurred.", e);}
     }
 
     /**
@@ -89,9 +87,11 @@ public class Reader extends Thread{
      */
     public void readStart(){
         // inform that reader started reading
-        out.println(Thread.currentThread().getName() + " started reading.");
+        out.println(
+                Thread.currentThread().getName()
+                + " started reading.");
         // reading time
-        threadSleep(1133);
+        threadSleep((int)(1000 + (Math.random() * (3000 - 1000))));
     }
 
     /**
@@ -101,11 +101,21 @@ public class Reader extends Thread{
      *
      */
     public void readEnd(){
-            // inform that reader stopped reading
-            out.println(Thread.currentThread().getName() + " stopped reading.");
-            // rest after reading
-            threadSleep(1500);
-            readingRoom.decrementReadCount();
+        // _role_: waiting/doing
+        out.println(
+                "Writers: " +
+                        readingRoom.getWaitingWriteCount().get() +
+                        "/" +
+                        readingRoom.getWriteCount().get() +
+                        " Readers: " +
+                        readingRoom.getWaitingReadCount().get() +
+                        "/" +
+                        readingRoom.getReadCount().get());
+        // inform that reader stopped reading
+        out.println(
+                Thread.currentThread().getName() +
+                " stopped reading.");
+        readingRoom.decrementReadCount();
     }
 
     /**
@@ -119,10 +129,7 @@ public class Reader extends Thread{
     public boolean threadSleep(int sleepLength){
         try {
             sleep(sleepLength);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            logger.log(Level.WARNING, "Interrupted exception occurred.", e);
-        }
+        } catch (InterruptedException e) { Thread.currentThread().interrupt(); logger.log( Level.WARNING, "Interrupted exception occurred.", e); }
         return true;
     }
 }

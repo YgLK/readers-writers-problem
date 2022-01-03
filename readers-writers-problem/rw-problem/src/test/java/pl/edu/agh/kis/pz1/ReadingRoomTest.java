@@ -77,4 +77,12 @@ public class ReadingRoomTest{
                 5,
                 readingRoom.getReadCountValue());
     }
+
+    @Test
+    public void testIfGuardsRoomRulesValidationDoesntThrowAnyError(){
+        boolean checkIfSuccess = false;
+        // check if method works when no Readers/Writers are defined
+        checkIfSuccess = readingRoom.readingRoomRulesValidation();
+        assertTrue("Error/Exception has been thrown.", checkIfSuccess);
+    }
 }

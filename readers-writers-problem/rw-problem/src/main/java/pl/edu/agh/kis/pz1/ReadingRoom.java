@@ -18,6 +18,8 @@ public class ReadingRoom {
     private AtomicInteger writeCount;
     /** how many readers are in the room */
     private AtomicInteger readCount;
+    /** how many readers wait to enter the room */
+    private AtomicInteger waitingReadCount;
     /** how many writers wait to enter the room */
     private AtomicInteger waitingWriteCount;
     /** allows access for write-only operation */
@@ -41,41 +43,48 @@ public class ReadingRoom {
        writeCount = new AtomicInteger(0);
        readCount = new AtomicInteger(0);
        waitingWriteCount = new AtomicInteger(0);
-       startTheGuard = true;
+        waitingReadCount = new AtomicInteger(0);
+        startTheGuard = true;
     }
 
     /**
      * The method symbolise Guard staying in front of the Reading Room
      * who prevents coming writers/readers from breaking the problem's rules.
-     * He let Readers or Writers to enter Reading Room on condition that
-     * there is available space for them.
-     *
-     * Guard notifies readers/writers when reading room is available and lets them enter in.
      *
      */
     public void guard(){
         while(startTheGuard){
-            // check if writer can enter the room
-            if(canWriterEnter()) {
-                synchronized (this.writeLock){
-                    // guard increases count of writers
-                    this.writeCount.getAndIncrement();
-                    // let the writer enter by notifying thread associated with write lock
-                    // exclude it from SONAR, because notifying single thread is on purpose in this particular case
-                    writeLock.notify(); // NOSONAR
-                }
-            }
-            // check if reader can enter the room
-            if(canReaderEnter()) {
-                synchronized (this.readLock){
-                    // guard increases count of readers
-                    this.readCount.incrementAndGet();
-                    // let the reader enter by notifying thread associated with read lock
-                    // exclude it from SONAR, because notifying single thread is on purpose in this particular case
-                    readLock.notify(); // NOSONAR
-                }
+            readingRoomRulesValidation();
+        }
+    }
+
+    /**
+     * The method used by the Guard to let Readers or Writers
+     * enter Reading Room on condition that there is available
+     * space for them.
+     *
+     * Guard notifies readers/writers when reading room is available and lets them enter in.
+     */
+    public boolean readingRoomRulesValidation(){
+        // check if writer can enter the room
+        if(canWriterEnter()) {
+            synchronized (this.writeLock){
+                // guard increases count of writers
+                this.writeCount.getAndIncrement();
+                // let the writer enter by notifying a thread associated with write lock
+                writeLock.notify();
             }
         }
+        // check if reader can enter the room
+        if(canReaderEnter()) {
+            synchronized (this.readLock){
+                // guard increases count of readers
+                this.readCount.incrementAndGet();
+                // let the reader enter by notifying a thread associated with read lock
+                readLock.notify();
+            }
+        }
+        return true;
     }
 
     /**
@@ -177,6 +186,11 @@ public class ReadingRoom {
     /** @return counter of Writers waiting to enter the Reading Room */
     public AtomicInteger getWaitingWriteCount(){
         return this.waitingWriteCount;
+    }
+
+    /** @return counter of Writers waiting to enter the Reading Room */
+    public AtomicInteger getWaitingReadCount(){
+        return this.waitingReadCount;
     }
 
     /** @return writeLock connected with the current ReadingRoom */

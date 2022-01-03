@@ -64,25 +64,18 @@ public class Writer extends Thread {
                 // increment counter of waiting writers
                 readingRoom.getWaitingWriteCount().getAndIncrement();
                 boolean tmp = true;
-                do{
-                    // if WRITER can enter change tmp value
-                    if(!cannotEnter){
-                    tmp = false;
-                    }
+                do{ // if WRITER can enter change tmp value
+                    if(!cannotEnter){ tmp = false; }
                     /* wait for the notification that entering
                      Reading Room is available */
                     writeLock.wait();
                 }while(tmp);
                 // decrement counter of waiting writers after writer enters the Reading Room
                 readingRoom.getWaitingWriteCount().getAndDecrement();
-            } catch (InterruptedException e) {
                 // interrupt current thread if Interrupted Exception occurred
-                Thread.currentThread().interrupt();
-                logger.log(Level.WARNING, "Interrupted exception occurred.", e);
-            }
+            } catch (InterruptedException e) { Thread.currentThread().interrupt(); logger.log(Level.WARNING, "Interrupted exception occurred.", e); }
             // writing session
-            writeStart();
-            writeEnd();
+            writeStart(); writeEnd();
         }
     }
 
@@ -94,9 +87,21 @@ public class Writer extends Thread {
      */
     public void writeStart (){
         // inform that writer started writing
-        out.println(Thread.currentThread().getName() + " started writing.");
+        out.println(
+                Thread.currentThread().getName() +
+                        " started writing.");
+        // _role_: waiting/doing
+        out.println(
+                "Writers: " +
+                        readingRoom.getWaitingWriteCount().get() +
+                        "/" +
+                        readingRoom.getWriteCount().get() +
+                        " Readers: " +
+                        readingRoom.getWaitingReadCount().get() +
+                        "/" +
+                        readingRoom.getReadCount().get());
         // writing time
-        threadSleep(500);
+        threadSleep((int)(1000 + (Math.random() * (3000 - 1000))));
     }
 
     /**
@@ -108,9 +113,9 @@ public class Writer extends Thread {
     public void writeEnd(){
         readingRoom.getWriteCount().getAndDecrement();
         // inform that writer stopped writing
-        out.println(Thread.currentThread().getName() + " stopped writing.\n");
-        // sleep after writing
-        threadSleep(2500);
+        out.println(
+                Thread.currentThread().getName() +
+                " stopped writing.\n");
     }
 
     /**
@@ -124,10 +129,7 @@ public class Writer extends Thread {
     public boolean threadSleep(int sleepLength){
         try {
             sleep(sleepLength);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            logger.log(Level.WARNING, "Interrupted exception occurred.", e);
-        }
+        } catch (InterruptedException e) { Thread.currentThread().interrupt(); logger.log( Level.WARNING, "Interrupted exception occurred.", e); }
         return true;
     }
 }
