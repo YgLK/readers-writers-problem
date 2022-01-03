@@ -51,4 +51,3 @@ and run main method in the Main class in the rw-problem module.
                               
 `Writers: X/Y Readers: Z/W` - X Writers wait for writing, Y Writers are writing right now.<br />
 			                  Z Readers wait for reading, W Readers are reading right now.
-                        
